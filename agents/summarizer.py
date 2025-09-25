@@ -14,24 +14,16 @@ def summarizer(state,detailed: bool = False) -> str:
         Formatted summary string
     """
     # structured data from agents
-    messages = state.get("messages", [])
+    user_goal = state.get("user_goal", {})
     fitness_plan = state.get("fitness_plan", {})
     nutrition_plan = state.get("nutrition_plan", {})
     supplement_recommendations = state.get("supplements", {})
-    user_goals = state.get("user_goals", {})
-
-    if not messages and not any(
-        [fitness_plan, nutrition_plan, supplement_recommendations]
-    ):
-        return "No consultation data to summarize."
 
     consultation_context = ""
 
-    # Add user goals and constraints
-    if user_goals:
-        consultation_context += f"User Goals: {user_goals}\n\n"
+    if user_goal:
+        consultation_context += f"User Goal: {user_goal}\n\n"
 
-    # Add agent recommendations
     if fitness_plan:
         consultation_context += f"Fitness Plan: {fitness_plan}\n\n"
 
@@ -42,13 +34,6 @@ def summarizer(state,detailed: bool = False) -> str:
         consultation_context += (
             f"Supplement Recommendations: {supplement_recommendations}\n\n"
         )
-
-    # Add conversation messages if available
-    if messages:
-        conversation_text = ""
-        for msg in messages:
-            conversation_text += f"{msg.get('content', '')}\n"
-        consultation_context += f"Conversation Details: {conversation_text}"
 
     if not consultation_context.strip():
         return "No consultation content to summarize."
@@ -69,7 +54,7 @@ def summarizer(state,detailed: bool = False) -> str:
         - Any constraints or limitations mentioned
 
         2. WORKOUT PLAN ACTION ITEMS
-        - Weekly schedule and structure  
+        - Weekly/daily schedule and structure  
         - Key exercises and progression
         - Specific modifications if any
 
@@ -86,6 +71,7 @@ def summarizer(state,detailed: bool = False) -> str:
         Format as clear, actionable items that the user can easily follow and reference.
         Use an encouraging, professional coaching tone.
         Make it practical for text output with clear headers and bullet points.
+        Do not add any information not present in the consultation data.
     """
 
     user_prompt = f"""
@@ -116,7 +102,7 @@ def summarizer(state,detailed: bool = False) -> str:
             {'=' * 60} DISCLAIMER {'=' * 60}
             This plan is for informational purposes only. Please consult with healthcare professionals before starting any new fitness program or 
             taking supplements, especially if you have pre-existing conditions.
-            {'=' * 60}
+            {'=' * 120}
         """
 
         return formatted_summary
