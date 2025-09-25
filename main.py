@@ -2,12 +2,9 @@ from dotenv import load_dotenv
 from langgraph.graph import StateGraph, START, END
 
 from state import State
-from agents import coordinator
 from nodes import (
-    planner_node,
-    check_exit_condition,
-    coordinator_routing,
-    participant_node,
+    human_node,
+    fitness_planner_node,
     summarizer_node
 )
 
@@ -22,35 +19,22 @@ def build_graph():
 
     builder = StateGraph(State)
 
-    builder.add_node("human", planner_node)
-    builder.add_node("coordinator", coordinator)  # Use coordinator directly
-    builder.add_node("participant", participant_node)
-    builder.add_node("summarizer", summarizer_node)
+    builder.add_node("human", human_node)
+    builder.add_node("fitness planner", fitness_planner_node)
+    # builder.add_node("nutritionist", nutritionist)
+    # builder.add_node("hydration", hydration_supplement)
+    # builder.add_node("summarizer", summarizer)
 
     # Edges
     builder.add_edge(START, "human")
 
-    builder.add_conditional_edges(
-        "human",
-        check_exit_condition,
-        {
-            "summarizer": "summarizer",
-            "coordinator": "coordinator"
-        }
-    )
-
-    builder.add_conditional_edges(
-        "coordinator",
-        coordinator_routing,
-        {
-            "participant": "participant",
-            "human": "human"
-        }
-    )
-
-    builder.add_edge("participant", "coordinator")
-
-    builder.add_edge("summarizer", END)
+    builder.add_edge("human", "fitness planner")
+    # builder.add_edge("fitness planner", "nutritionist")
+    # builder.add_edge("nutritionist", "hydration")
+    # builder.add_edge("hydration", "summarizer")
+    #
+    # builder.add_edge("summarizer", END)
+    builder.add_edge("fitness planner", END)
 
     return builder.compile()
 
@@ -66,9 +50,10 @@ def main():
     print(graph.get_graph().draw_ascii())
 
     initial_state = State(
-        messages=[],
-        volley_msg_left=0,
-        next_speaker=None
+        user_goal='',
+        nutrition_plan='',
+        fitness_plan='',
+        supplements=''
     )
 
     try:
