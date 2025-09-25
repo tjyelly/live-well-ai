@@ -26,7 +26,7 @@ TIMEZONE = "Asia/Singapore"
 # Open-Meteo daily fields (no API key required)
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 # Provider limit: typically up to 16 days
-PROVIDER_MAX_DAYS = 16
+PROVIDER_MAX_DAYS = 14
 
 # Classification thresholds (tweak if you like)
 RAINY_DAY_MM = 1.0             # >=1.0 mm in a day => Rainy
@@ -109,7 +109,7 @@ def forecast_sg_weather(days: int = 20) -> List[Dict[str, str]]:
 
 if __name__ == "__main__":
     # Print one word per day, datewise
-    for row in forecast_one_word(20):
+    for row in forecast_sg_weather(20):
         print(f"{row['date']}: {row['condition']}")
 
 def singapore_weather(days: int = 5) -> str:
