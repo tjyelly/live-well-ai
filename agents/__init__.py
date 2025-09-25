@@ -3,4 +3,4 @@ Agents module for Singapore Kopitiam project.
 """
 
 
-__all__ = ['coordinator', 'participant', 'summarizer','hydration_supplement','nutritionist']
+__all__ = ['fitness_planner', 'summarizer', 'hydration_supplement', 'nutritionist']
