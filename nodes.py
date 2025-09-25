@@ -1,58 +1,36 @@
 from typing import Literal
 from state import State
-from agents import coordinator, participant, summarizer
+
+from agents.fitness_planner import fitness_planner as fitness_planner
+#from agents.nutritionist import nutritionist as nutritionist_node
+#from agents.hydration_supplement import hydration_supplement_node as hydration_supplement_node
+from agents.summarizer import summarizer as _summarizer_node
 
 
-def planner_node(state: State) -> dict:
+def human_node(state: State) -> dict:
     """
     Fitness Planner node - gets user input and plans workout routine.
     """
+    user_input = input("\nYou: ").strip()
 
+    return {
+        "user_goal": user_input,
+        "nutrition_plan": '',
+        "fitness_plan": '',
+        "supplements": ''
+    }
 
-def check_exit_condition(state: State) -> Literal["summarizer", "coordinator"]:
+def fitness_planner_node(state: State) -> dict:
     """
-    Check if user typed 'exit' to end conversation.
+    Fitness Planner node - gets user input and plans workout routine.
     """
-    messages = state.get("messages", [])
-    if messages:
-        last_message = messages[-1]
-        content = last_message.get("content", "")
-
-        if "exit" in content.lower():
-            return "summarizer"
-
-    return "coordinator"
-
-
-def coordinator_routing(state: State) -> Literal["participant", "human"]:
-    """
-    Route from coordinator based on volley count.
-    """
-    volley_left = state.get("volley_msg_left", 0)
-
-    if volley_left > 0:
-        return "participant"
-    else:
-        return "human"
-
-
-def participant_node(state: State) -> dict:
-    """
-    Participant node - calls the appropriate participant and handles output.
-    """
-    next_speaker = state.get("next_speaker", "ah_seng")  # Default fallback
-
-    # Call participant with the selected speaker
-    result = participant(next_speaker, state)
+    result = fitness_planner(state)
 
     # Print and return messages
-    if result and "messages" in result:
-        messages = state.get("messages", []).copy()
-        for msg in result["messages"]:
-            print(msg.get("content", ""))
-            messages.append(msg)
+    if result:
+        print(result)
 
-        return {"messages": messages}
+        return {"nutrition_plan": result}
 
     return {}
 
@@ -64,8 +42,14 @@ def summarizer_node(state: State) -> dict:
     print("\n=== CONVERSATION ENDING ===\n")
 
     # Generate and print summary
-    summary = summarizer(state)
+    summary = summarizer_node(state)
     print(summary)
     print("\nThank you! Come back to kopitiam anytime lah!")
 
     return {}  # Empty update to end
+
+__all__ = [
+    "human_node",
+    "fitness_planner_node",
+    "summarizer_node",
+]
