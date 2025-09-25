@@ -76,7 +76,7 @@ Who should speak next to keep this kopitiam conversation lively?"""
         debug(f"LLM selected: {selected_speaker}", "COORDINATOR")
 
         # Validate speaker
-        valid_speakers = ["ah_seng", "mei_qi", "bala", "dr_tan"]
+        valid_speakers = ["ah_seng", "mei_qi", "bala", "dr_tan","fitness_coach"]
         if selected_speaker not in valid_speakers:
             # Fallback to round-robin if invalid
             import random

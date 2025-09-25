@@ -2,7 +2,7 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 
 
-def summarizer(state) -> str:
+def summarizer(state,detailed: bool = False) -> str:
     """
     Generate fitness and nutrition summary report using LLM after complete consultation.
 

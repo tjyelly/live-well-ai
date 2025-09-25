@@ -3,7 +3,12 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from utils import debug
 import re
-
+from agents.hydration_supplement import (
+    HydrationSupplementAgent,
+    UserProfile,
+    Climate,
+    Workout
+)
 
 # Persona configurations
 PERSONAS = {
@@ -38,8 +43,18 @@ PERSONAS = {
         "personality": "Thoughtful, philosophical, patient, loves teaching moments",
         "speech_style": "Proper English with minimal Singlish, thoughtful pauses, asks profound questions",
         "tools": ["time", "weather", "news"]  # Dr. Tan has ALL tools
+    },
+    # 🚀 New Fitness persona powered by HydrationSupplementAgent
+    "fitness_coach": {
+        "name": "Coach Lin",
+        "age": 35,
+        "backstory": "Certified trainer and nutrition enthusiast who helps others lose weight safely",
+        "personality": "Motivational, structured, science-based but approachable",
+        "speech_style": "Direct, encouraging, fitness-coach style",
+        "tools": ["hydration_supplement"]
     }
 }
+
 
 
 def execute_tool(tool_name):
@@ -55,6 +70,18 @@ def execute_tool(tool_name):
         return weather()
     elif tool_name == "news":
         return singapore_news()
+    elif tool_name == "hydration_supplement":
+        # Demo: run HydrationSupplementAgent
+        user = UserProfile(name="Test User", body_mass_kg=70, vitamin_d_deficient_or_low_sun=True)
+        climate = Climate(avg_temp_c=30, avg_humidity_pct=70)
+        week_pattern = [
+            Workout(day_of_week="Mon", minutes=45, intensity="moderate"),
+            Workout(day_of_week="Wed", minutes=30, intensity="vigorous"),
+            Workout(day_of_week="Sat", minutes=60, intensity="moderate", is_outdoor=False),
+        ]
+        workouts_by_week = [week_pattern[:] for _ in range(4)]
+        agent = HydrationSupplementAgent(user, climate, workouts_by_week)
+        return agent.generate()
     else:
         return f"Unknown tool: {tool_name}"
 
@@ -75,6 +102,20 @@ def participant(persona_id, state) -> dict:
 
     persona = PERSONAS[persona_id]
     debug(f"\n=== {persona['name']} is thinking... ===")
+
+    if persona_id == "fitness_coach":
+        plan = execute_tool("hydration_supplement")
+        return {
+            "messages": [
+                {
+                    "role": "assistant",
+                    "name": persona["name"],
+                    "content": f"\n{persona['name']} (Hydration & Supplement Plan):\n{plan}\n",
+                }
+            ],
+            # Save structured data into state for summarizer
+            "supplements": plan.get("supplement_cheatsheet", {}),
+        }
 
     # Get recent conversation for context
     messages = state.get("messages", [])

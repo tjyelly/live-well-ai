@@ -111,3 +111,14 @@ if __name__ == "__main__":
     # Print one word per day, datewise
     for row in forecast_one_word(20):
         print(f"{row['date']}: {row['condition']}")
+
+def singapore_weather(days: int = 5) -> str:
+    """
+    Returns a simple multi-line string forecast for Singapore.
+    Example:
+        2025-09-25: Rainy
+        2025-09-26: Sunny
+    """
+    rows = forecast_sg_weather(days)
+    return "\n".join([f"{r['date']}: {r['condition']}" for r in rows])
+
