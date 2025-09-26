@@ -1,5 +1,5 @@
 from .singapore_time import singapore_time
-from .weather import singapore_weather
+from .singapore_weather import singapore_weather
 from .singapore_news import singapore_news
 
 

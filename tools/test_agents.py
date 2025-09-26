@@ -1,6 +1,6 @@
 import json
 from agents import hydration_supplement
-from tools.weather import singapore_weather
+from tools.singapore_weather import singapore_weather
 from tools.singapore_time import singapore_time
 from agents import nutritionist as nutrition_agent
 

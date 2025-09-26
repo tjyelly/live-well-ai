@@ -112,7 +112,7 @@ if __name__ == "__main__":
     for row in forecast_sg_weather(20):
         print(f"{row['date']}: {row['condition']}")
 
-def singapore_weather(days: int = 5) -> str:
+def singapore_weather(days: int = 14) -> str:
     """
     Returns a simple multi-line string forecast for Singapore.
     Example:
