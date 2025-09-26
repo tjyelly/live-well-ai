@@ -22,7 +22,7 @@ def _build_user_prompt(user_goal: str, user_context: str) -> str:
         f"{goal}\n\n"
         "Extra context (if any):\n"
         f"{ctx}\n\n"
-        "Please produce a 7-day nutrition plan with:\n"
+        "Please produce a 14-day nutrition plan with:\n"
         "1) Daily calorie target + macro targets (protein, fat, carbs) and brief rationale.\n"
         "2) Simple meal outline per day (Breakfast / Lunch / Dinner; add Snack if relevant) with 1–2 swaps.\n"
         "3) Respect restrictions/allergies.\n"

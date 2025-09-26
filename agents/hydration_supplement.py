@@ -31,7 +31,7 @@ def _build_user_prompt(user_context: str) -> str:
     return (
         "User profile, climate, and workouts:\n"
         f"{user_context.strip()}\n\n"
-        "Please produce a **4-week hydration & supplement plan** following these rules:\n"
+        "Please produce a **2-week hydration & supplement plan** following these rules:\n"
         "1) Give daily baseline water intake in ml (based on body weight).\n"
         "2) For workouts: pre, during, post hydration rules (with sodium if needed).\n"
         "3) Consider heat, humidity, and altitude in recommendations.\n"
