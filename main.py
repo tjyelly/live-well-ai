@@ -5,10 +5,10 @@ from state import State
 from nodes import (
     human_node,
     fitness_planner_node,
+    nutritionist_node,
     hydration_supplement_node,
     summarizer_node
 )
-
 
 load_dotenv(override=True)  # Override, so it would use your local .env file
 
@@ -21,19 +21,17 @@ def build_graph():
     builder = StateGraph(State)
 
     builder.add_node("human", human_node)
-    builder.add_node("fitness planner", fitness_planner_node)
-    # builder.add_node("nutritionist", nutritionist)
-    builder.add_node("hydration", hydration_supplement_node)
+    builder.add_node("fitness_planner", fitness_planner_node)   # use underscore consistently
+    builder.add_node("nutritionist", nutritionist_node)
+    builder.add_node("hydration", hydration_supplement_node)    # keep this name consistent
     builder.add_node("summarizer", summarizer_node)
 
     # Edges
     builder.add_edge(START, "human")
-
-    builder.add_edge("human", "fitness planner")
-    # builder.add_edge("fitness planner", "nutritionist")
-    builder.add_edge("fitness planner", "hydration")
-    # builder.add_edge("hydration", "summarizer")
-    
+    builder.add_edge("human", "fitness_planner")
+    builder.add_edge("fitness_planner", "nutritionist")
+    builder.add_edge("nutritionist", "hydration")
+    builder.add_edge("hydration", "summarizer")
     builder.add_edge("summarizer", END)
 
     return builder.compile()
@@ -51,8 +49,8 @@ def main():
 
     initial_state = State(
         user_goal='',
-        nutrition_plan='',
         fitness_plan='',
+        nutrition_plan='',
         hydration_supplement=''
     )
 
