@@ -1,4 +1,5 @@
 from typing import Literal
+from agents.hydration_supplement import hydration_supplement
 from state import State
 
 from agents.fitness_planner import fitness_planner as fitness_planner
@@ -17,7 +18,7 @@ def human_node(state: State) -> dict:
         "user_goal": user_input,
         "nutrition_plan": '',
         "fitness_plan": '',
-        "supplements": ''
+        "hydration_supplement": ''
     }
 
 def fitness_planner_node(state: State) -> dict:
@@ -30,10 +31,23 @@ def fitness_planner_node(state: State) -> dict:
     if result:
         print(result)
 
-        return {"fitness_plan": result}
+        return {"fitness_plan": result, "user_context": state.get("user_goal", "")}
 
     return {}
 
+def hydration_supplement_node(state: State) -> dict:
+    """
+    Fitness Planner node - gets user input and plans workout routine.
+    """
+    result = hydration_supplement(state)
+
+    # Print and return messages
+    if result:
+        print(result)
+
+        return {"hydration_supplement": result}
+
+    return {}
 
 def summarizer_node(state: State) -> dict:
     """
@@ -51,5 +65,6 @@ def summarizer_node(state: State) -> dict:
 __all__ = [
     "human_node",
     "fitness_planner_node",
+    "hydration_supplement_node",
     "summarizer_node"
 ]
