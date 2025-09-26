@@ -8,8 +8,8 @@ The system is built with **LangGraph** for workflow orchestration and integrates
 
 ## ✨ Features
 
-- **Fitness Planner Agent** 🏋️ – Generates safe and effective workout routines.  
-- **Nutritionist Agent** 🥗 – Creates structured 7-day nutrition plans, optionally enhanced with tools (e.g., calorie/macro calculators).  
+- **Fitness Planner Agent** 🏋️ – Generates safe and effective workout routines based on the singapore weather.  
+- **Nutritionist Agent** 🥗 – Creates structured 14-day nutrition plans, optionally enhanced with tools (e.g., calorie/macro calculators).  
 - **Hydration & Supplement Agent** 💧 – Provides hydration schedules and supplement guidance tailored to the user’s activity.  
 - **Summarizer Agent** 📝 – Summarizes the conversation and provides actionable takeaways.  
 - **Agent Orchestration with LangGraph** – Manages workflow across agents in sequence:  
@@ -24,16 +24,17 @@ live-well-ai-main/
 │
 ├── agents/                # Individual agent implementations
 │   ├── fitness_planner.py
-│   ├── nutritionist.py
 │   ├── hydration_supplement.py
+│   ├── nutritionist.py
 │   └── summarizer.py
 │
 ├── nodes.py               # Node wrappers for agents (LangGraph-compatible)
 ├── state.py               # Shared state definition
 ├── main.py                # Entry point: builds and runs the LangGraph workflow
 │
-├── tools/                 # Optional: utility tools (e.g., macro calculator)
-│
+├── tools/                 # utility tools to get singapore time and singapore weather
+│   ├── singapore_time.py
+│   ├── singapore_weather.py
 ├── requirements.txt       # Python dependencies
 └── README.md              # Project documentation
 ```
@@ -65,7 +66,7 @@ python -m venv .venv
 
 ### 4. Install dependencies
 ```bash
-pip install -r requirements.txt
+pip install -r requires.txt
 ```
 
 > If you face dependency conflicts (e.g. `langchain-core`), update with:
@@ -86,6 +87,13 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 ```bash
 python main.py
+```
+
+Alternate
+
+```bash
+uv sync
+uv run python main.py
 ```
 
 Example interaction:
@@ -115,25 +123,6 @@ User → Human Node → Fitness Planner → Nutritionist → Hydration → Summa
 ```
 
 Each agent updates the shared `State` object with new insights.
-
----
-
-## 🖥️ Physical Architecture (suggested)
-
-- **Interface**: CLI (current), extensible to Streamlit/Web UI.  
-- **Workflow**: LangGraph orchestrator in Python.  
-- **LLM Provider**: OpenAI GPT (via `langchain_openai`).  
-- **Tooling**: Optional macro calculator or external API integrations.  
-- **Deployment**: Can run locally in venv, Docker, or cloud service (Heroku, GCP, AWS).  
-
----
-
-## 🚀 Future Enhancements
-
-- [ ] Add sleep/stress management agents  
-- [ ] Connect to wearable APIs (Fitbit, Apple Health)  
-- [ ] Store user profiles & progress in a database  
-- [ ] Web UI with charts & plan tracking  
 
 ---
 
