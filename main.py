@@ -5,6 +5,7 @@ from state import State
 from nodes import (
     human_node,
     fitness_planner_node,
+    hydration_supplement_node,
     summarizer_node
 )
 
@@ -22,19 +23,18 @@ def build_graph():
     builder.add_node("human", human_node)
     builder.add_node("fitness planner", fitness_planner_node)
     # builder.add_node("nutritionist", nutritionist)
-    # builder.add_node("hydration", hydration_supplement)
-    # builder.add_node("summarizer", summarizer)
+    builder.add_node("hydration", hydration_supplement_node)
+    builder.add_node("summarizer", summarizer_node)
 
     # Edges
     builder.add_edge(START, "human")
 
     builder.add_edge("human", "fitness planner")
     # builder.add_edge("fitness planner", "nutritionist")
-    # builder.add_edge("nutritionist", "hydration")
+    builder.add_edge("fitness planner", "hydration")
     # builder.add_edge("hydration", "summarizer")
-    #
-    # builder.add_edge("summarizer", END)
-    builder.add_edge("fitness planner", END)
+    
+    builder.add_edge("summarizer", END)
 
     return builder.compile()
 
@@ -53,7 +53,7 @@ def main():
         user_goal='',
         nutrition_plan='',
         fitness_plan='',
-        supplements=''
+        hydration_supplement=''
     )
 
     try:

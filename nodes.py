@@ -1,10 +1,11 @@
 from typing import Literal
+from agents.hydration_supplement import hydration_supplement
 from state import State
 
 from agents.fitness_planner import fitness_planner as fitness_planner
 #from agents.nutritionist import nutritionist as nutritionist_node
 #from agents.hydration_supplement import hydration_supplement_node as hydration_supplement_node
-from agents.summarizer import summarizer as _summarizer_node
+from agents.summarizer import summarizer as summarizer
 
 
 def human_node(state: State) -> dict:
@@ -17,7 +18,7 @@ def human_node(state: State) -> dict:
         "user_goal": user_input,
         "nutrition_plan": '',
         "fitness_plan": '',
-        "supplements": ''
+        "hydration_supplement": ''
     }
 
 def fitness_planner_node(state: State) -> dict:
@@ -30,10 +31,23 @@ def fitness_planner_node(state: State) -> dict:
     if result:
         print(result)
 
-        return {"nutrition_plan": result}
+        return {"fitness_plan": result, "user_context": state.get("user_goal", "")}
 
     return {}
 
+def hydration_supplement_node(state: State) -> dict:
+    """
+    Fitness Planner node - gets user input and plans workout routine.
+    """
+    result = hydration_supplement(state)
+
+    # Print and return messages
+    if result:
+        print(result)
+
+        return {"hydration_supplement": result}
+
+    return {}
 
 def summarizer_node(state: State) -> dict:
     """
@@ -42,14 +56,15 @@ def summarizer_node(state: State) -> dict:
     print("\n=== CONVERSATION ENDING ===\n")
 
     # Generate and print summary
-    summary = summarizer_node(state)
+    summary = summarizer(state, detailed=True)
     print(summary)
-    print("\nThank you! Come back to kopitiam anytime lah!")
+    print("\nThank you! Live Well AI is rooting for you!")
 
-    return {}  # Empty update to end
+    return {}
 
 __all__ = [
     "human_node",
     "fitness_planner_node",
-    "summarizer_node",
+    "hydration_supplement_node",
+    "summarizer_node"
 ]
