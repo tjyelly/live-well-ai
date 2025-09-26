@@ -1,3 +1,6 @@
+import traceback
+import logging
+
 from dotenv import load_dotenv
 from langgraph.graph import StateGraph, START, END
 
@@ -59,7 +62,12 @@ def main():
     except KeyboardInterrupt:
         print("\n\nConversation interrupted. Goodbye!")
     except Exception as e:
-        print(f"\nAn error occurred: {e}")
+        print("\n=== ERROR ===")
+        print(f"Type     : {e.__class__.__name__}")
+        print(f"Message  : {e}")
+        print(f"Args     : {e.args}")
+        print("Traceback:")
+        print(traceback.format_exc())  # full stack with lines
         print("Ending conversation...")
 
 
