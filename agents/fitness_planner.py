@@ -4,6 +4,7 @@ from typing import TypedDict, Dict
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from tools import singapore_time, singapore_weather
 
 load_dotenv()  # reads .env at project root
 _api_key = os.getenv("OPENAI_API_KEY")
@@ -13,7 +14,10 @@ _client = OpenAI(api_key=_api_key)
 
 _SYSTEM = (
     "You are a certified fitness coach. Create safe, practical workout plans for adults. "
-    "Balance cardio and strength, include warm-up and cool-down, and respect user constraints."
+    "Balance cardio and strength, include warm-up and cool-down, and respect user constraints. Provide"
+    "Provide the workout plan based on the singapore weather"
+    "Your available actions are, time: Returns current time in Singapore & weather: Returns weather for 14 days"
+    "IMPORTANT: You can use multiple actions by continuing the loop"
 )
 
 # Single, clear prompt asking for a 2-week plan in readable text (not JSON)
@@ -55,3 +59,17 @@ def fitness_planner(state) -> Dict[str, str]:
         plan_text = chat.choices[0].message.content.strip()
 
     return {"fitness_plan": plan_text}
+
+def execute_tool(tool_name):
+    """
+    Execute a specific tool and return its output.
+    Returns Tool output as string
+    """
+    tool_name = tool_name.lower().strip()
+
+    if tool_name == "time":
+        return singapore_time()
+    elif tool_name == "weather":
+        return singapore_weather()
+    else:
+        return f"Unknown tool: {tool_name}"
