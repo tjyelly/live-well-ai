@@ -120,5 +120,6 @@ def singapore_weather(days: int = 14) -> str:
         2025-09-26: Sunny
     """
     rows = forecast_sg_weather(days)
+    print("\n=== Singapore weather tool called ===\n")
     return "\n".join([f"{r['date']}: {r['condition']}" for r in rows])
 

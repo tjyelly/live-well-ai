@@ -24,12 +24,13 @@ def fitness_planner_node(state: State) -> dict:
     Fitness Planner node - generates a workout plan.
     """
     result = fitness_planner(state)
+    plain_text = (result or {}).get("fitness_plan", "").strip()
 
-    if result:
+    if plain_text:
         print("\n=== FITNESS PLAN ===\n")
-        print(result)
+        print(plain_text)
         return {
-            "fitness_plan": result,
+            "fitness_plan": plain_text,
             "user_context": state.get("user_goal", "")
         }
 
@@ -41,12 +42,12 @@ def nutritionist_node(state: State) -> dict:
     Nutritionist node - generates a 7-day nutrition plan.
     """
     result = nutritionist(state)
-    plan_text = (result or {}).get("nutrition_plan", "").strip()
+    plain_text = (result or {}).get("nutrition_plan", "").strip()
 
-    if plan_text:
+    if plain_text:
         print("\n=== NUTRITION PLAN ===\n")
-        print(plan_text)
-        return {"nutrition_plan": plan_text}
+        print(plain_text)
+        return {"nutrition_plan": plain_text}
 
     return {}
 
@@ -56,11 +57,12 @@ def hydration_supplement_node(state: State) -> dict:
     Hydration & Supplement node - generates hydration and supplement plan.
     """
     result = hydration_supplement(state)
+    plain_text = (result or {}).get("hydration_supplement", "").strip()
 
-    if result:
+    if plain_text:
         print("\n=== HYDRATION & SUPPLEMENT PLAN ===\n")
-        print(result)
-        return {"hydration_supplement": result}
+        print(plain_text)
+        return {"hydration_supplement": plain_text}
 
     return {}
 
@@ -69,8 +71,6 @@ def summarizer_node(state: State) -> dict:
     """
     Summarizer node - generates and displays conversation summary.
     """
-    print("\n=== CONVERSATION ENDING ===\n")
-
     summary = summarizer(state, detailed=True)
     print(summary)
     print("\nThank you! Live Well AI is rooting for you!")
