@@ -113,13 +113,14 @@ if __name__ == "__main__":
         print(f"{row['date']}: {row['condition']}")
 
 def singapore_weather(days: int = 14) -> str:
-    """
-    Returns a simple multi-line string forecast for Singapore.
-    Example:
-        2025-09-25: Rainy
-        2025-09-26: Sunny
-    """
+    """Return and also print the forecast."""
     rows = forecast_sg_weather(days)
+    result = "\n".join(f"{r['date']}: {r['condition']}" for r in rows)
+
     print("\n=== Singapore weather tool called ===\n")
-    return "\n".join([f"{r['date']}: {r['condition']}" for r in rows])
+    print(result)           # prints the exact string you're returning
+    # import sys; sys.stdout.flush()  # (optional) force flush if logs lag
+
+    return result
+
 
