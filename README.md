@@ -35,6 +35,7 @@ live-well-ai-main/
 ├── tools/                 # utility tools to get singapore time and singapore weather
 │   ├── singapore_time.py
 │   ├── singapore_weather.py
+│
 ├── requirements.txt       # Python dependencies
 └── README.md              # Project documentation
 ```
